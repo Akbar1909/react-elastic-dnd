@@ -1,0 +1,11 @@
+{
+  "name": "react-elastic-dnd",
+  "version": "1.0.0",
+  "description": "it is gonna handle dnd events 🤩",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
