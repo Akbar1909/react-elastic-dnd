@@ -6,6 +6,7 @@
   "scripts": {
     "commit": "git-cz",
     "test": "mocha src/index.test.js -w",
+    "test:single": "mocha src/index.test.js",
     "semantic-release": "semantic-release"
   },
   "repository": {
@@ -31,10 +32,16 @@
     "chai": "4.3.7",
     "commitizen": "4.2.6",
     "cz-conventional-changelog": "3.3.0",
+    "ghooks": "2.0.4",
     "mocha": "10.2.0",
     "semantic-release": "^20.0.0"
   },
   "czConfig": {
     "path": "node_modules/cz-conventional-changelog"
+  },
+  "config": {
+    "ghooks": {
+      "pre-commit": "npm run test:single"
+    }
   }
 }
