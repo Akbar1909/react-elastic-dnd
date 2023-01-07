@@ -1,11 +1,40 @@
 {
   "name": "react-elastic-dnd",
-  "version": "1.0.0",
-  "description": "it is gonna handle dnd events 🤩",
-  "main": "index.js",
+  "version": "0.0.0-development",
+  "description": "React Elastic dnd",
+  "main": "src/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "commit": "git-cz",
+    "test": "mocha src/index.test.js -w",
+    "semantic-release": "semantic-release"
   },
-  "author": "",
-  "license": "ISC"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Akbar1909/react-elastic-dnd.git"
+  },
+  "keywords": [
+    "dnd",
+    "react",
+    "react-dnd",
+    "elastic",
+    "drag-and-drop",
+    "drag",
+    "drop"
+  ],
+  "author": "Akbar, Muhammadsodiq <akbarbobomurodov19092000@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Akbar1909/react-elastic-dnd/issues"
+  },
+  "homepage": "https://github.com/Akbar1909/react-elastic-dnd#readme",
+  "devDependencies": {
+    "chai": "4.3.7",
+    "commitizen": "4.2.6",
+    "cz-conventional-changelog": "3.3.0",
+    "mocha": "10.2.0",
+    "semantic-release": "^20.0.0"
+  },
+  "czConfig": {
+    "path": "node_modules/cz-conventional-changelog"
+  }
 }
