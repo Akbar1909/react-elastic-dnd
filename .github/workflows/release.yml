@@ -16,7 +16,7 @@ jobs:
         with:
           node-version: 16
       - run: npm ci
-      - run: npm test:single
+      - run: npm run test:single
 
   publish-npm:
     needs: build
@@ -28,6 +28,6 @@ jobs:
           node-version: 16
           registry-url: https://registry.npmjs.org/
       - run: npm ci
-      - run: npm semantic-release
+      - run: npm run semantic-release
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
