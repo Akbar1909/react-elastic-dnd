@@ -6,7 +6,7 @@
   "scripts": {
     "commit": "git-cz",
     "test:watch": "jest --watch",
-    "test": "jest",
+    "test:single": "jest",
     "semantic-release": "semantic-release",
     "start": "webpack serve --mode development --open --hot",
     "prebuild": "rimraf dist",
