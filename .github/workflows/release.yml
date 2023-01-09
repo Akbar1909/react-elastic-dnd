@@ -17,6 +17,7 @@ jobs:
           node-version: 18
       - run: npm ci
       - run: npm run test:single
+      - run: npm run test:coverage
 
   publish-npm:
     needs: build
