@@ -1,10 +1,4 @@
-import {
-  useEffect,
-  useRef,
-  MouseEvent,
-  useState,
-  useLayoutEffect,
-} from "react";
+import { useRef, MouseEvent, useState, useMemo } from "react";
 
 const inital = {
   pos1: 0,
@@ -13,13 +7,12 @@ const inital = {
   pos4: 0,
 };
 
-const useDrag = ({ defaultPosition = {} }) => {
-  const [mode, setMode] = useState("idle");
+const useDrag = () => {
+  const [mode, setMode] = useState("stopped");
   const position = useRef(inital);
   const [translate, setTranslate] = useState({
     top: 0,
     left: 0,
-    ...defaultPosition,
   });
 
   const draggableElRef = useRef(null);
@@ -30,24 +23,20 @@ const useDrag = ({ defaultPosition = {} }) => {
     position.current.pos3 = e.clientX;
     position.current.pos4 = e.clientY;
     setMode("pressed");
+
     document.addEventListener("mousemove", onHandleMouseMove);
+    document.addEventListener("mouseup", onHandleMouseUp);
   };
 
   const onHandleMouseUp = () => {
     setMode("stopped");
+    document.removeEventListener("mouseup", onHandleMouseUp);
     document.removeEventListener("mousemove", onHandleMouseMove);
-  };
-
-  const onDragStartHandler = (e) => {
-    draggableElRef.current.dataTransfer.dropEffect = "copy";
-    console.log("run");
-    setMode("test");
   };
 
   const onHandleMouseMove = (e) => {
     e.preventDefault();
 
-    if (mode === "stopped") return;
     setMode("dragging");
     const newPos1 = position.current.pos3 - e.clientX;
     const newPos2 = position.current.pos4 - e.clientY;
@@ -64,53 +53,23 @@ const useDrag = ({ defaultPosition = {} }) => {
     });
   };
 
-  useEffect(() => {
-    document.addEventListener("mouseup", onHandleMouseUp);
+  const cursorStyle = useMemo(() => {
+    if (mode === "dragging") return "grabbing";
+    if (mode === "pressed") return "grab";
+    return "initial";
+  }, [mode]);
 
-    return () => {
-      document.removeEventListener("mouseup", onHandleMouseUp);
-      document.removeEventListener("mousemove", onHandleMouseMove);
-    };
-  }, []);
-
-  useLayoutEffect(() => {
-    if (draggableElRef.current && !defaultPosition) {
-      setTranslate({
-        top: draggableElRef.current.offsetTop,
-        left: draggableElRef.current.offsetLeft,
-      });
-    }
-  }, [draggableElRef, defaultPosition]);
-
-  useLayoutEffect(() => {
-    if (draggableElRef.current) {
-      draggableElRef.current.style.position = "fixed";
-      draggableElRef.current.style.top = `${translate.top}px`;
-      draggableElRef.current.style.left = `${translate.left}px`;
-    }
-  }, [translate]);
-
-  useLayoutEffect(() => {
-    if (!draggableElRef.current) return;
-
-    draggableElRef.current.addEventListener("mousedown", onHandleDragMouseDown);
-    draggableElRef.current.addEventListener("dragstart", onDragStartHandler);
-    return () => {
-      draggableElRef.current.removeEventListener(
-        "mousedown",
-        onHandleDragMouseDown
-      );
-
-      draggableElRef.current.removeEventListener(
-        "dragstart",
-        onDragStartHandler
-      );
-    };
-  }, []);
+  const style = {
+    position: "fixed",
+    top: `${translate.top}px`,
+    left: `${translate.left}px`,
+    cursor: cursorStyle,
+  };
 
   return {
+    style,
     ref: draggableElRef,
-    mode,
+    onHandleDragMouseDown,
   };
 };
 

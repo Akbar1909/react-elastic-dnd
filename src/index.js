@@ -4,14 +4,16 @@ import useDrag from "./hooks/useDrag";
 import "./styles.css";
 
 const App = () => {
-  const { ref, mode } = useDrag({});
+  const { ref, mode, style, onHandleDragMouseDown } = useDrag();
   return (
     <div
       style={{
         background:
           mode === "dragging" ? "red" : mode === "pressed" ? "yellow" : "blue",
+        ...style,
       }}
       ref={ref}
+      onMouseDown={onHandleDragMouseDown}
     >
       <h1>Hello World 1234</h1>
       <h2>Welcome to your First React App..!</h2>
