@@ -1,7 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import useDrag from "./hooks/useDrag";
-import "./styles.css";
 
 const App = () => {
   const { ref, mode, style, onHandleDragMouseDown } = useDrag();

@@ -7,6 +7,26 @@ const inital = {
   pos4: 0,
 };
 
+/**
+ *@typedef {Object} StyleTypedef - style
+ *@property {'fixed'} position - element position (fixed)
+ *@property {string} top - top property
+ *@property {string} left - left property
+ *@property {'grabbing' | 'grab' | 'initial'} - cursor style
+ */
+
+/**
+ * @typedef {Object} ReturnTypedef - return
+ * @property {StyleTypedef} style - element style
+ * @property {Object} ref - element
+ * @property {function} onHandleDragMouseDown - the function for onMouseDown event
+ */
+
+/**
+ * @description useDrag hook helps you to move your element with mouse.
+ * @returns {ReturnTypedef}
+ */
+
 const useDrag = () => {
   const [mode, setMode] = useState("stopped");
   const position = useRef(inital);
@@ -16,6 +36,9 @@ const useDrag = () => {
   });
 
   const draggableElRef = useRef(null);
+
+  // when the function is called, mousemove and mouseup events are attached to the document
+  // to track mouse
 
   const onHandleDragMouseDown = (e) => {
     e.preventDefault();
@@ -28,11 +51,15 @@ const useDrag = () => {
     document.addEventListener("mouseup", onHandleMouseUp);
   };
 
+  // when the function is called, mouseup and mousemove events are removed from the document
+
   const onHandleMouseUp = () => {
     setMode("stopped");
     document.removeEventListener("mouseup", onHandleMouseUp);
     document.removeEventListener("mousemove", onHandleMouseMove);
   };
+
+  // when the mouse moves, the function updates current element's position
 
   const onHandleMouseMove = (e) => {
     e.preventDefault();
@@ -53,6 +80,7 @@ const useDrag = () => {
     });
   };
 
+  // according to mode, the style of cursor is different
   const cursorStyle = useMemo(() => {
     if (mode === "dragging") return "grabbing";
     if (mode === "pressed") return "grab";
