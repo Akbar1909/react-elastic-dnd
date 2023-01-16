@@ -1,0 +1,25 @@
+{
+  "env": {
+    "browser": true,
+    "commonjs": true,
+    "es2021": true,
+    "jest/globals": true
+  },
+  "extends": ["eslint:recommended", "prettier", "plugin:react/recommended"],
+  "overrides": [],
+  "parser": "@babel/eslint-parser",
+  "parserOptions": {
+    "ecmaVersion": 2020,
+    "sourceType": "module"
+  },
+  "plugins": ["prettier", "jest"],
+  "rules": {
+    "no-duplicate-imports": "error",
+    "no-console": "off"
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  }
+}
