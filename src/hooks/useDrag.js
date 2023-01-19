@@ -1,6 +1,6 @@
 import { useRef, useState, useMemo } from 'react'
 
-const inital = {
+const initial = {
   pos1: 0,
   pos2: 0,
   pos3: 0,
@@ -27,9 +27,43 @@ const inital = {
  * @returns {ReturnTypedef}
  */
 
-const useDrag = () => {
+function restrictDraggableZoneToElementParent({ e, draggable, parent }) {
+  const parentRect = parent.getBoundingClientRect()
+  const draggableRect = draggable.getBoundingClientRect()
+
+  if (
+    e.clientX >= parentRect.left &&
+    e.clientX + draggableRect.width <= parentRect.right &&
+    e.clientY >= parentRect.top &&
+    e.clientY + draggableRect.height <= parentRect.bottom
+  ) {
+    //add draggableRect.width draggableRect.height accounts for
+    draggable.style.left = `${e.clientX}px`
+    draggable.style.top = `${e.clientY}px`
+
+    return {
+      left: `${e.clientX}px`,
+      top: `${e.clientY}px`,
+    }
+  } else {
+    //if mouse went out of bounds in Horizontal dir.
+    if (e.clientX + draggableRect.width >= parentRect.right) {
+      return {
+        left: `${parentRect.right - draggableRect.width}px`,
+      }
+    }
+    //if mouse went out of bounds in Vertical dir.
+    if (e.clientY + draggableRect.height >= parentRect.bottom) {
+      return {
+        top: `${parentRect.bottom - draggableRect.height}px`,
+      }
+    }
+  }
+}
+
+const useDrag = ({ isOnlyInParent = false } = {}) => {
   const [mode, setMode] = useState('stopped')
-  const position = useRef(inital)
+  const position = useRef(initial)
   const [translate, setTranslate] = useState({
     top: 0,
     left: 0,
@@ -64,6 +98,17 @@ const useDrag = () => {
   const onHandleMouseMove = (e) => {
     e.preventDefault()
 
+    if (isOnlyInParent) {
+      const parent = draggableElRef.current.parentElement
+
+      setTranslate((prev) => ({
+        ...prev,
+        ...restrictDraggableZoneToElementParent({ e, draggable: draggableElRef.current, parent }),
+      }))
+
+      return
+    }
+
     setMode('dragging')
     const newPos1 = position.current.pos3 - e.clientX
     const newPos2 = position.current.pos4 - e.clientY
@@ -88,7 +133,7 @@ const useDrag = () => {
   }, [mode])
 
   const style = {
-    position: 'fixed',
+    position: 'absolute',
     top: `${translate.top}px`,
     left: `${translate.left}px`,
     cursor: cursorStyle,

@@ -3,3 +3,4 @@ node_modules
 template
 .eslintcache
 dist  
+webpack.config.js
